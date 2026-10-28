@@ -1,0 +1,38 @@
+
+ // use prisma-8
+
+model User {
+  id        Int    @id @default(autoincrement())
+  name      String
+  phone     String @unique
+  createdAt String @default(now())
+}
+
+
+model CustomerOrder {
+  id               Int         @id @default(autoincrement())
+  fullName         String
+  phone            String
+  province         String
+  city             String
+  address          String
+  postalCode       String
+  note             String?
+  total            Int
+  status           String      @default("pending")
+  paymentMethod    String      @default("card_transfer")
+  paymentStatus    String      @default("awaiting_payment")
+  paymentReference String?
+  createdAt        String      @default(now())
+  items            OrderItem[]
+}
+
+model OrderItem {
+  id                Int           @id @default(autoincrement())
+  orderId           Int
+  productId         String
+  productName       String
+  unitPrice         Int
+  quantity          Int
+  order             CustomerOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+}
